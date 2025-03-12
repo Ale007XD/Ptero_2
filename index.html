@@ -1,95 +1,21 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игра: Полеты птеродактиля</title>
-    <style>
-        body { margin: 0; overflow: hidden; }
-        canvas { display: block; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Полет птеродактиля</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js';
-    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/controls/OrbitControls.js';
-
-    // Сцена, камера, рендерер
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-    // Освещение
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(10, 10, 10).normalize();
-    scene.add(light);
-
-    // Плоскость (земля)
-    const planeGeometry = new THREE.PlaneGeometry(100, 100);
-    const planeMaterial = new THREE.MeshPhongMaterial({ color: 0x228B22 });
-    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.rotation.x = -Math.PI / 2;
-    scene.add(plane);
-
-    // Птеродактиль
-    const pterodactylGeometry = new THREE.ConeGeometry(0.5, 2, 4);
-    const pterodactylMaterial = new THREE.MeshPhongMaterial({ color: 0xff4500 });
-    const pterodactyl = new THREE.Mesh(pterodactylGeometry, pterodactylMaterial);
-    pterodactyl.rotation.x = Math.PI / 2;
-    scene.add(pterodactyl);
-
-    // Случайные скалы
-    function createRock(x, z) {
-        const rockGeometry = new THREE.DodecahedronGeometry(Math.random() * 2 + 1);
-        const rockMaterial = new THREE.MeshPhongMaterial({ color: 0x8B4513 });
-        const rock = new THREE.Mesh(rockGeometry, rockMaterial);
-        rock.position.set(x, Math.random() * 5 + 1, z);
-        scene.add(rock);
-    }
-
-    for (let i = 0; i < 20; i++) {
-        createRock((Math.random() - 0.5) * 50, (Math.random() - 0.5) * 50);
-    }
-
-    // Управление птеродактилем
-    let moveUp = false,
-        moveDown = false,
-        moveLeft = false,
-        moveRight = false;
-
-    document.addEventListener('keydown', (event) => {
-        if (event.code === 'ArrowUp') moveUp = true;
-        if (event.code === 'ArrowDown') moveDown = true;
-        if (event.code === 'ArrowLeft') moveLeft = true;
-        if (event.code === 'ArrowRight') moveRight = true;
-    });
-
-    document.addEventListener('keyup', (event) => {
-        if (event.code === 'ArrowUp') moveUp = false;
-        if (event.code === 'ArrowDown') moveDown = false;
-        if (event.code === 'ArrowLeft') moveLeft = false;
-        if (event.code === 'ArrowRight') moveRight = false;
-    });
-
-    camera.position.set(0, 10, 20);
-    
-    // Анимация
-    function animate() {
-        requestAnimationFrame(animate);
-
-        if (moveUp) pterodactyl.position.y += 0.1;
-        if (moveDown) pterodactyl.position.y -= 0.1;
-        if (moveLeft) pterodactyl.position.x -= 0.1;
-        if (moveRight) pterodactyl.position.x += 0.1;
-
-        camera.lookAt(pterodactyl.position);
-        
-        renderer.render(scene, camera);
-    }
-
-    animate();
-</script>
+  <div id="game-container">
+    <div id="score">Счет: 0</div>
+    <div id="game-over" class="hidden">Игра окончена! <br> Нажмите пробел для перезапуска</div>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script>
+  <script src="pterodactyl.js"></script>
+  <script src="rock.js"></script>
+  <script src="game.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
